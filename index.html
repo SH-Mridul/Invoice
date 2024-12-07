@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Template</title>
+    <link rel="icon" type="image/png" href="fav.jpg">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.9.2/dist/html2pdf.bundle.min.js"></script>
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .invoice-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
+
+        select, option {
+            width: 100%;
+            padding: 10px;
+     }
+
+     /* hr */
+
+     .custom-hr {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #555;
+            margin: 20px 0;
+        }
+        .custom-hr::before,
+        .custom-hr::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #ccc;
+        }
+        .custom-hr span {
+            padding: 0 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* footer */
+        footer .custom-hr {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #efe9e9;
+            margin: 20px 0;
+        }
+
+        footer.custom-hr::before,
+        footer.custom-hr::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #ccc;
+        }
+
+        footer .custom-hr span {
+            padding: 0 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #f6ebeb;
+        }
+        
+
+    </style>
+</head>
+
+<body>
+    <div class="container invoice-container" id="invoice">
+        <h3 class="text-center mb-4">Invoice</h3>
+
+        <div class="custom-hr">
+            <span>Company Details</span>
+        </div>
+
+        <div class="row mb-3" style="background-color:darkgray">
+            <div class="col-md-6 mb-3">
+                <label for="companyName" class="form-label">Company Name</label>
+                <input type="text" class="form-control form-control-sm" id="companyName" placeholder="Enter company name">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="companyAddress" class="form-label">Address</label>
+                <input type="text" class="form-control form-control-sm" id="companyAddress" placeholder="Enter company address">
+            </div>
+        </div>
+        <div class="row mb-3" style="background-color:darkgray">
+            <div class="col-md-4 mb-3">
+                <label for="companyEmail" class="form-label">Email</label>
+                <input type="email" class="form-control form-control-sm" id="companyEmail" placeholder="Enter email">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="companyPhone" class="form-label">Mobile</label>
+                <input type="text" class="form-control form-control-sm" id="companyPhone" placeholder="Enter phone number">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="invoiceNumber" class="form-label">Invoice Number</label>
+                <input type="text" class="form-control form-control-sm" id="invoiceNumber" placeholder="Enter invoice number">
+            </div>
+        </div>
+
+        <div class="custom-hr">
+            <span>Client Details</span>
+        </div>
+
+        <div class="row mb-3" style="background-color:rgb(153, 236, 204)">
+            <div class="col-md-6 mb-3">
+                <label for="customerName" class="form-label">Customer Name</label>
+                <input type="text" class="form-control form-control-sm" id="customerName" placeholder="Enter customer name">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="customerPhone" class="form-label">Customer Phone</label>
+                <input type="text" class="form-control form-control-sm" id="customerPhone" placeholder="Enter customer phone">
+            </div>
+            
+            <div class="col-md-6 mb-3">
+                <label for="customerAddress" class="form-label">Customer Address</label>
+                <input type="text" class="form-control form-control-sm" id="customerAddress" placeholder="Enter customer address">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="customerEmail" class="form-label">Customer Email</label>
+                <input type="text" class="form-control form-control-sm" id="customerEmail" placeholder="Enter customer email">
+            </div>
+        </div>
+        <div class="custom-hr">
+            <span>currency Details</span>
+        </div>
+        <div class="row mb-3 mt-3" style="background-color:rgb(237, 191, 134)">
+            <div class="col-md-12 mb-3">
+                <label for="currencies" class="form-label">Currencies</label>
+                <input type="text" id="search" class="form-control form-control-sm mb-1" placeholder="Search for your currency">
+                <select name="currencies" id="currencies" class="form-control form-control-sm mb-3" required>
+                    <option value="" selected disabled>--------------------- select your currency ---------------------</option>
+                </select>
+            </div>
+        </div>
+        <div class="custom-hr">
+            <span>Products Details</span>
+        </div>
+        <table class="table table-bordered" id="invoiceTable" style="background-color:rgb(108, 174, 201)">
+            <thead class="table-dark">
+                <tr>
+                    <th>Item Name</th>
+                    <th>Item Price</th>
+                    <th>Item Quantity</th>
+                    <th>Subtotal</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" class="form-control item-name form-control-sm" placeholder="Item Name"></td>
+                    <td><input type="number" class="form-control item-price form-control-sm" placeholder="Price"></td>
+                    <td><input type="number" class="form-control item-quantity form-control-sm" placeholder="Quantity"></td>
+                    <td class="subtotal">0</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-info btn-sm mb-3" id="addRow">Add Row</button>
+
+        <div class="custom-hr">
+            <span>Payment Details</span>
+        </div>
+
+        <div class="row mb-3" style="background-color:rgb(116, 224, 134)">
+            <div class="col-md-4 mb-3">
+                <label for="totalAmount" class="form-label">Total Amount</label>
+                <input type="text" class="form-control form-control-sm" id="totalAmount" readonly>
+            </div>
+            <div class="col-md-4">
+                <label for="discount" class="form-label">Discount (%)</label>
+                <input type="number" class="form-control form-control-sm" id="discount" value="0">
+            </div>
+            <div class="col-md-4">
+                <label for="tax" class="form-label">VAT/Tax (%)</label>
+                <input type="number" class="form-control form-control-sm" id="tax" value="0">
+            </div>
+        </div>
+        <div class="row mb-3" style="background-color:rgb(227, 113, 220)">
+            <div class="col-md-12 mb-3">
+                <label for="payableAmount" class="form-label">Payable Amount</label>
+                <input type="text" class="form-control form-control-sm" id="payableAmount" readonly>
+            </div>
+        </div>
+
+        <center><button type="button" class="btn btn-danger btn-sm" id="printButton">Make Invoice</button></center>
+    </div>
+
+        <footer class="mt-5 py-4 bg-dark text-white">
+        <div class="container">
+            <div class="row">
+                <!-- Contact Section -->
+                <div class="col-md-4">
+                    <h5>Contact</h5>
+                    <ul class="list-unstyled small">
+                        <li><a href="mailto:sakhawat.hossain.mridul@gmail.com"></a><i class="bi bi-envelope"></i> Email: sakhawat.hossain.mridul@gmail.com</a></li>
+                        <li><i class="bi bi-twitter"></i> sakhawat.hossain.mridul@gmail.com</li>
+                        <li><i class="bi bi-geo-alt"></i> Address: Chittagong,Bangladesh</li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4 text-center">
+                    <h5>Support Me</h5>
+                    <p>If you'd like to support me, feel free to buy me a coffee just reach out!</p>
+                </div>
+
+                <!-- Social Media Section -->
+                <div class="col-md-4 text-center">
+                    <h5>Follow Me</h5>
+                    <div>
+                        <a href="https://www.facebook.com/sakhawat.hossain.mridul/" class="text-white me-3"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="https://www.facebook.com/sakhawat.hossain.mridul/" class="text-white me-3"><i class="bi bi-twitter fs-5"></i></a>
+                        <a href="https://www.linkedin.com/in/sakhawat-hossain-mridul/" class="text-white me-3"><i class="bi bi-linkedin fs-5"></i></a>
+                        <a href="https://github.com/SH-Mridul" class="text-white"><i class="bi bi-github fs-5"></i></a>
+                        
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="custom-hr">
+                        <span>About Me</span>
+                    </div>
+                    <p class="small" style="text-align: center;">
+                        Hello, I'm Sakhawat Hossain Mridul from Bangladesh.
+                        As a final-year Computer Science and Engineering (CSE) student,
+                         I am passionate about using technology to make a difference. 
+                        I aim to help startups and small businesses that may lack the budget
+                         for expensive billing software by creating a cost-effective and efficient invoice system. 
+                        This project reflects my commitment to innovation and supporting others through practical solutions.
+                        If this initiative resonates with you, feel free to reach out. Together, we can create meaningful impacts!
+                    </p>
+                </div>
+            </div>
+            <hr class="border-light">
+            <div class="text-center small">
+                <p class="mb-0">
+                    &copy; 2024 Sakhawat Hossain Mridul. All rights reserved. Contact: 
+                    <a href="mailto:sakhawat.hossain.mridul@gmail.com" style="text-decoration: none !important; color: inherit;">sakhawat.hossain.mridul@gmail.com</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        document.getElementById('addRow').addEventListener('click', function () {
+            const lastRow = document.querySelector('#invoiceTable tbody tr:last-child');
+            const inputs = lastRow.querySelectorAll('input');
+            const isFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+
+            if (isFilled) {
+                const tableBody = document.querySelector('#invoiceTable tbody');
+                const newRow = `
+                    <tr>
+                        <td><input type="text" class="form-control item-name form-control-sm" placeholder="Item Name"></td>
+                        <td><input type="number" class="form-control item-price form-control-sm" placeholder="Price"></td>
+                        <td><input type="number" class="form-control item-quantity form-control-sm" placeholder="Quantity"></td>
+                        <td class="subtotal">0</td>
+                        <td><button type="button" class="btn btn-danger btn-sm remove-row">Remove</button></td>
+                    </tr>
+                `;
+                tableBody.insertAdjacentHTML('beforeend', newRow);
+            } else {
+                alert('Please fill all fields in the current row before adding a new one.');
+            }
+        });
+
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-row')) {
+                e.target.closest('tr').remove();
+                updateTotals();
+            }
+        });
+
+        document.addEventListener('input', function (e) {
+            if (e.target.classList.contains('item-price') || e.target.classList.contains('item-quantity')) {
+                const row = e.target.closest('tr');
+                const price = parseFloat(row.querySelector('.item-price').value) || 0;
+                const quantity = parseFloat(row.querySelector('.item-quantity').value) || 0;
+                row.querySelector('.subtotal').textContent = (price * quantity).toFixed(2);
+                updateTotals();
+            } else if (e.target.id === 'discount' || e.target.id === 'tax') {
+                updateTotals();
+            }
+        });
+
+        function updateTotals() {
+            const subtotals = document.querySelectorAll('.subtotal');
+            let totalAmount = 0;
+            subtotals.forEach(subtotal => {
+                totalAmount += parseFloat(subtotal.textContent);
+            });
+
+            const discount = parseFloat(document.getElementById('discount').value) || 0;
+            const tax = parseFloat(document.getElementById('tax').value) || 0;
+            const discountAmount = totalAmount * (discount / 100);
+            const taxAmount = totalAmount * (tax / 100);
+
+            const payableAmount = totalAmount - discountAmount + taxAmount;
+
+            document.getElementById('totalAmount').value = totalAmount.toFixed(2);
+            document.getElementById('payableAmount').value = payableAmount.toFixed(2);
+        }
+
+
+        document.getElementById('printButton').addEventListener('click', function () {
+            // Collect all required fields
+            const requiredFields = [
+                document.getElementById('companyName'),
+                document.getElementById('companyAddress'),
+                document.getElementById('companyEmail'),
+                document.getElementById('companyPhone'),
+                document.getElementById('invoiceNumber'),
+                document.getElementById('customerName'),
+                document.getElementById('customerPhone'),
+                document.getElementById('customerAddress'),
+                document.getElementById('customerEmail'),
+                document.getElementById('currencies'),
+            ];
+
+            // Check if any required field is empty
+            const isAnyFieldEmpty = requiredFields.some(field => field.value.trim() === '');
+
+            // Show an alert and prevent action if any field is empty
+            if (isAnyFieldEmpty) {
+                alert('Please fill in all required fields before printing the invoice.');
+                return;
+            }
+
+            // Check if there are items in the table
+            const rows = document.querySelectorAll('#invoiceTable tbody tr');
+            if (rows.length === 0) {
+                alert('Please add at least one item to the invoice.');
+                return;
+            }
+
+            // Process invoice if all data is valid
+            const invoiceData = {
+                companyName: requiredFields[0].value,
+                companyAddress: requiredFields[1].value,
+                companyEmail: requiredFields[2].value,
+                companyPhone: requiredFields[3].value,
+                invoiceNumber: requiredFields[4].value,
+                customerName: requiredFields[5].value,
+                customerPhone: requiredFields[6].value,
+                customerAddress: requiredFields[7].value,
+                customerEmail: requiredFields[8].value,
+                currency: requiredFields[9].value,
+                items: [],
+                discount: parseFloat(document.getElementById('discount').value) || 0,
+                tax: parseFloat(document.getElementById('tax').value) || 0,
+                totalAmount: parseFloat(document.getElementById('totalAmount').value) || 0,
+                payableAmount: parseFloat(document.getElementById('payableAmount').value) || 0,
+            };
+
+            rows.forEach(row => {
+                const itemName = row.querySelector('.item-name').value.trim();
+                const itemPrice = parseFloat(row.querySelector('.item-price').value) || 0;
+                const itemQuantity = parseFloat(row.querySelector('.item-quantity').value) || 0;
+                const subtotal = parseFloat(row.querySelector('.subtotal').textContent) || 0;
+
+                if (itemName) {
+                    invoiceData.items.push({ itemName, itemPrice, itemQuantity, subtotal });
+                }
+            });
+
+            // Store data in session storage
+            sessionStorage.setItem('invoiceData', JSON.stringify(invoiceData));
+
+            // Redirect to the second page
+            window.location.href = 'invoice-display.html'; // Replace with your second page's file name
+        });
+    </script>
+
+  <script>
+    const currencies = [
+      { symbol: " ", name: "None" },
+      { symbol: "$", name: "US Dollar (USD)" },
+      { symbol: "€", name: "Euro (EUR)" },
+      { symbol: "₹", name: "Indian Rupee (INR)" },
+      { symbol: "¥", name: "Japanese Yen (JPY)" },
+      { symbol: "£", name: "British Pound Sterling (GBP)" },
+      { symbol: "৳", name: "Bangladeshi Taka (BDT)" },
+      { symbol: "₽", name: "Russian Ruble (RUB)" },
+      { symbol: "₩", name: "South Korean Won (KRW)" },
+      { symbol: "₫", name: "Vietnamese Dong (VND)" },
+      { symbol: "₴", name: "Ukrainian Hryvnia (UAH)" },
+      { symbol: "₪", name: "Israeli New Shekel (ILS)" },
+      { symbol: "₺", name: "Turkish Lira (TRY)" },
+      { symbol: "R", name: "South African Rand (ZAR)" },
+      { symbol: "A$", name: "Australian Dollar (AUD)" },
+      { symbol: "C$", name: "Canadian Dollar (CAD)" },
+      { symbol: "NZ$", name: "New Zealand Dollar (NZD)" },
+      { symbol: "CHF", name: "Swiss Franc (CHF)" },
+      { symbol: "HK$", name: "Hong Kong Dollar (HKD)" },
+      { symbol: "SG$", name: "Singapore Dollar (SGD)" },
+      { symbol: "฿", name: "Thai Baht (THB)" },
+      { symbol: "₵", name: "Ghanaian Cedi (GHS)" },
+      { symbol: "៛", name: "Cambodian Riel (KHR)" },
+      { symbol: "Kč", name: "Czech Koruna (CZK)" },
+      { symbol: "kr", name: "Swedish Krona (SEK)" },
+      { symbol: "zł", name: "Polish Zloty (PLN)" },
+      { symbol: "L", name: "Romanian Leu (RON)" },
+      { symbol: "Q", name: "Guatemalan Quetzal (GTQ)" },
+      { symbol: "₡", name: "Costa Rican Colón (CRC)" },
+      { symbol: "₱", name: "Philippine Peso (PHP)" },
+      { symbol: "Lek", name: "Albanian Lek (ALL)" },
+      { symbol: "ƒ", name: "Aruban Florin (AWG)" }
+    ];
+
+    const searchInput = document.getElementById('search');
+    const currencySelect = document.getElementById('currencies');
+
+    // Function to populate the select dropdown
+    function populateDropdown(filteredCurrencies) {
+      // Clear existing options except the first one
+      currencySelect.innerHTML = '<option value="" selected disabled>--------------------- Select your currency ---------------------</option>';
+      filteredCurrencies.forEach(currency => {
+        const option = document.createElement('option');
+        option.value = currency.symbol;
+        option.textContent = currency.name;
+        currencySelect.appendChild(option);
+      });
+
+      // Automatically select the first matching option (if it exists)
+      if (filteredCurrencies.length > 0) {
+        currencySelect.selectedIndex = 1; // First item after the disabled option
+      }
+    }
+
+    // Initial population with all currencies
+    populateDropdown(currencies);
+
+    // Event listener for filtering options based on search
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.toLowerCase();
+      const filtered = currencies.filter(currency => 
+        currency.name.toLowerCase().includes(query)
+      );
+      populateDropdown(filtered);
+    });
+  </script>
+</body>
+
+</html>
