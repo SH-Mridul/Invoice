@@ -301,16 +301,36 @@
             document.getElementById('invoiceContainer').innerHTML = invoiceHTML;
         });
 
+        // document.getElementById('downloadButton').addEventListener('click', function () {
+        //     const invoice = document.getElementById('invoiceContainer');
+        //     const options = {
+        //         margin: 10,
+        //         filename: 'invoice.pdf',
+        //         html2canvas: { scale: 2 },
+        //         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        //     };
+
+        //     html2pdf().from(invoice).set(options).save();
+        // });
+
         document.getElementById('downloadButton').addEventListener('click', function () {
             const invoice = document.getElementById('invoiceContainer');
+            
+            // Generate a random number for the filename
+            const randomFilename = Math.floor(Math.random() * 1000000000) + '.pdf';
+            
             const options = {
                 margin: 10,
-                filename: 'invoice.pdf',
+                filename: randomFilename,  // Use the random filename
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
+            // Generate the PDF and download it
             html2pdf().from(invoice).set(options).save();
+
+            // Redirect to the index page after downloading
+            window.location.href = 'index.html';  // Replace with your actual index page URL
         });
     </script>
 </body>
