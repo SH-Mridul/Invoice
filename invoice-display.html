@@ -138,7 +138,39 @@
 
 <body>
     <div id="invoiceContainer"></div>
+
+    <div class="row mt-3 mb-3">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="custom-hr">
+                <span style="color: black !important;">Invoice Colour Settings</span>
+            </div>
+            <table class="table table-sm table-bordered table-responsive table-hover" id="colorSettings">
+                <tbody>
+                    <tr>
+                        <td>Invoice Header Background Color: <br><input type="color" id="HeaderBackgoundColorInput" value="#028858"></td>
+                        <td>Invoice Header Alphabet Color: <br><input type="color" id="HeaderAlphabetcolorInput" value="#FFFFFF"></td>
+                    </tr>
+                    <tr>    
+                        <td>Client Information Background Color: <br><input type="color" id="ClientBackgoundColorInput" value="#27322e"></td>
+                        <td>Client Information Alphabet Color: <br><input type="color" id="ClientAlphabetcolorInput" value="#FFFFFF"></td>
+                    </tr>
+                    <tr>
+                        <td>Purchased Items Table Background Color: <br><input type="color" id="ProductTableBackgoundColorInput" value="#028858"></td>
+                        <td>Purchased Items Table Alphabet Color: <br><input type="color" id="ProductTableAlphabetcolorInput" value="#FFFFFF"></td>
+                    </tr>
+                    <tr>
+                        <td>Payable Amount Background Color: <br><input type="color" id="PayableAmountBackgoundColorInput" value="#028858"></td>
+                        <td>Payable Amount Alphabet Color: <br><input type="color" id="PayableAmountAlphabetcolorInput" value="#FFFFFF"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
     <div class="text-center mt-4">
+        <button class="btn btn-danger btn-sm" onclick="window.location.href='index.html'">Make New Invoice</button>
         <button class="btn btn-primary btn-sm" id="downloadButton">Download Invoice</button>
     </div>
 
@@ -234,7 +266,7 @@
                     <!-- Company and Client Information -->
                     <div class="info-section row"style="text-align:center;">
                         <h6><strong>Billed To</strong><hr></h6>
-                        <table class="table thead-light client">
+                        <table class="table thead-light client" id="client-info-table">
                             <tr>
                                 <th><b>Client Name:</b> ${invoiceData.customerName}</th>
                                 <th><b>Address:</b> ${invoiceData.customerAddress}</th>
@@ -247,7 +279,7 @@
                     </div>
 
                     <!-- Items Table -->
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="products-items-table">
                         <thead>
                             <tr>
                                 <th>Item No</th>
@@ -301,18 +333,6 @@
             document.getElementById('invoiceContainer').innerHTML = invoiceHTML;
         });
 
-        // document.getElementById('downloadButton').addEventListener('click', function () {
-        //     const invoice = document.getElementById('invoiceContainer');
-        //     const options = {
-        //         margin: 10,
-        //         filename: 'invoice.pdf',
-        //         html2canvas: { scale: 2 },
-        //         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        //     };
-
-        //     html2pdf().from(invoice).set(options).save();
-        // });
-
         document.getElementById('downloadButton').addEventListener('click', function () {
             const invoice = document.getElementById('invoiceContainer');
             
@@ -328,9 +348,67 @@
 
             // Generate the PDF and download it
             html2pdf().from(invoice).set(options).save();
+        });
+    </script>
 
-            // Redirect to the index page after downloading
-            window.location.href = 'index.html';  // Replace with your actual index page URL
+     <script>
+
+        // Reference the table
+        const table = document.getElementById('colorSettings');
+        // Add a change event listener to the table
+        table.addEventListener('change', (event) => {
+             if (event.target.tagName === 'INPUT') {
+                // Get the ID of the changed input
+                const inputId = event.target.id;
+                const inputValue = event.target.value;
+
+                // Log the specific input ID and its value
+                console.log(`Input Changed: ${inputId}, Value: ${inputValue}`);
+
+                // Collect values of all inputs by their IDs
+                const values = {
+
+                    // header(company infomation)
+                    HeaderBackgoundColorInput: document.getElementById('HeaderBackgoundColorInput').value,
+                    HeaderAlphabetcolorInput: document.getElementById('HeaderAlphabetcolorInput').value,
+
+                    //client infomation table
+                    ClientBackgoundColorInput: document.getElementById('ClientBackgoundColorInput').value,
+                    ClientAlphabetcolorInput: document.getElementById('ClientAlphabetcolorInput').value,
+
+                    //product table information
+                    ProductTableBackgoundColorInput: document.getElementById('ProductTableBackgoundColorInput').value,
+                    ProductTableAlphabetcolorInput: document.getElementById('ProductTableAlphabetcolorInput').value,
+
+                    //payable amount infomation
+                    PayableAmountBackgoundColorInput: document.getElementById('PayableAmountBackgoundColorInput').value,
+                    PayableAmountAlphabetcolorInput: document.getElementById('PayableAmountAlphabetcolorInput').value,
+                };
+
+                //header color settings
+                document.querySelector('.header').style.backgroundColor = values.HeaderBackgoundColorInput;
+                document.querySelector('.header').style.color = values.HeaderAlphabetcolorInput;
+
+                //client information color settings
+                const clientInfoTableHeaders = document.querySelectorAll('#client-info-table th');
+                clientInfoTableHeaders.forEach(th => {
+                    th.style.backgroundColor = values.ClientBackgoundColorInput;
+                    th.style.color = values.ClientAlphabetcolorInput;
+                });
+                
+
+
+                //items table color settings
+                const itemsTableHeaders = document.querySelectorAll('#products-items-table th');
+                itemsTableHeaders.forEach(th => {
+                    th.style.backgroundColor = values.ProductTableBackgoundColorInput;
+                    th.style.color = values.ProductTableAlphabetcolorInput;
+                });
+
+                //payable-amount color settings
+                document.querySelector('.amount-due').style.backgroundColor = values.PayableAmountBackgoundColorInput;
+                document.querySelector('.amount-due').style.color = values.PayableAmountAlphabetcolorInput;
+            }
         });
     </script>
 </body>
