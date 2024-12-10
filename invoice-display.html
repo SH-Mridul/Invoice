@@ -21,14 +21,17 @@
             background-color: #f8f9fa;
         }
 
+       
         .invoice-container {
             max-width: 900px;
-            margin: 20px auto;
-            padding: 20px;
+            margin: 0 auto;
+            padding: 10px; /* Reduced padding */
             background-color: white;
             border: 1px solid #ddd;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            page-break-inside: avoid; /* Prevents splitting content */
+            page-break-after: always;
         }
 
         /* Header Section */
@@ -72,6 +75,7 @@
         /* Table Styles */
         .table {
             margin-top: 20px;
+            page-break-inside: auto;
         }
 
         .table th {
@@ -151,6 +155,13 @@
             padding: 8px;
             text-align: left;
             border: 1px solid #ddd; /* Add borders */
+        }
+
+        table,
+        tr,
+        td,
+        th {
+            page-break-inside: avoid; /* Prevents table rows from breaking across pages */
         }
     </style>
 </head>
@@ -364,24 +375,35 @@
 
         document.getElementById('downloadButton').addEventListener('click', function () {
             const invoice = document.getElementById('invoiceContainer');
-            
-            // Generate a random number for the filename
-            const randomFilename = Math.floor(Math.random() * 1000000000) + '.pdf';
-            
             const options = {
-                margin: 10,
-                filename: randomFilename,  // Use the random filename
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                margin: [10, 10, 10, 10], // Adjust margins
+                filename: `invoice_${Math.floor(Math.random() * 1000000000)}_${new Date().toLocaleDateString()}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true, // Handles cross-origin issues for external images
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                },
+                pagebreak: { avoid: 'invoice-container' } // Ensures no unwanted page breaks
             };
 
-            // Generate the PDF and download it
-            html2pdf().from(invoice).set(options).save();
+            // Add page-break styles
+            const style = document.createElement('style');
+            style.textContent = `
+                table, tr, td, th { page-break-inside: avoid; }
+                .invoice-container { page-break-inside: avoid; }
+            `;
+            document.head.appendChild(style);
+
+           html2pdf().from(invoice).set(options).save()
         });
     </script>
 
      <script>
-
         // Reference the table
         const table = document.getElementById('colorSettings');
         // Add a change event listener to the table
