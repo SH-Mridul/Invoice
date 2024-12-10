@@ -173,7 +173,7 @@
         <div class="col-md-3"></div>
         <div class="col-md-6">
             <div class="custom-hr">
-                <span style="color: black !important;">Invoice Colour Settings</span>
+                <span style="color: black !important;">Invoice Colour & Note Settings</span>
             </div>
             <table class="table table-sm table-bordered table-responsive table-hover" id="colorSettings">
                 <tbody>
@@ -192,6 +192,9 @@
                     <tr>
                         <td>Payable Amount Background Color: <br><input type="color" id="PayableAmountBackgoundColorInput" value="#028858"></td>
                         <td>Payable Amount Alphabet Color: <br><input type="color" id="PayableAmountAlphabetcolorInput" value="#FFFFFF"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-center">Note: <br><input type="text" style="width: 80%;" class="form-control form-control-sm my-2 text-center border-success  d-block mx-auto" id="thankYouNote" value="*Your trust is greatly appreciated*"></td>
                     </tr>
                 </tbody>
             </table>
@@ -365,7 +368,7 @@
                     </div>
 
                     <div class="footer">
-                        <p style = "text-transform: capitalize;">*Your trust is greatly appreciated*</p>
+                        <p id="customerThankYouNote" style = "text-transform: capitalize;">*Your trust is greatly appreciated*</p>
                     </div>
                 </div>
             `;
@@ -423,9 +426,6 @@
                 const inputId = event.target.id;
                 const inputValue = event.target.value;
 
-                // Log the specific input ID and its value
-                console.log(`Input Changed: ${inputId}, Value: ${inputValue}`);
-
                 // Collect values of all inputs by their IDs
                 const values = {
 
@@ -444,6 +444,9 @@
                     //payable amount infomation
                     PayableAmountBackgoundColorInput: document.getElementById('PayableAmountBackgoundColorInput').value,
                     PayableAmountAlphabetcolorInput: document.getElementById('PayableAmountAlphabetcolorInput').value,
+
+                    //customer thank you note
+                    ThankYouNote: document.getElementById('thankYouNote').value
                 };
 
                 //header color settings
@@ -469,6 +472,9 @@
                 //payable-amount color settings
                 document.querySelector('.amount-due').style.backgroundColor = values.PayableAmountBackgoundColorInput;
                 document.querySelector('.amount-due').style.color = values.PayableAmountAlphabetcolorInput;
+
+                //customer thank you note settings
+                document.getElementById('customerThankYouNote').innerText = values.ThankYouNote;
             }
         });
     </script>
