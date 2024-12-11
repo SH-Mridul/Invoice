@@ -369,6 +369,7 @@
                         <div>
                             <p><strong>Subtotal:</strong>   ${invoiceData.currency}${invoiceData.totalAmount.toFixed(2)}</p>
                             <p><strong>Discount (${invoiceData.discount}%):</strong>    -${invoiceData.currency}${((invoiceData.totalAmount * invoiceData.discount) / 100).toFixed(2)}</p>
+                            <p><strong>Discount Amount:</strong>    -${invoiceData.currency}${(invoiceData.discountAmount).toFixed(2)}</p>
                             <p><strong>VAT/Tax (${invoiceData.tax}%):</strong>  ${invoiceData.currency}${((invoiceData.totalAmount * invoiceData.tax) / 100).toFixed(2)}</p>
                             <p class="amount-due">Payable Amount:   ${invoiceData.currency}${invoiceData.payableAmount.toFixed(2)}</p>
                         </div>

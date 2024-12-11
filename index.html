@@ -191,15 +191,19 @@
         </div>
 
         <div class="row mb-3" style="background-color:rgb(116, 224, 134)">
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
                 <label for="totalAmount" class="form-label">Total Amount</label>
                 <input type="text" class="form-control form-control-sm" id="totalAmount" readonly>
             </div>
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
                 <label for="discount" class="form-label">Discount (%)</label>
                 <input type="number" class="form-control form-control-sm" id="discount" value="0">
             </div>
-            <div class="col-md-4 mb-3">
+             <div class="col-md-3 mb-3">
+                <label for="discountAmount" class="form-label">Discount (Amount)</label>
+                <input type="number" class="form-control form-control-sm" id="discountAmount" value="0">
+            </div>
+            <div class="col-md-3 mb-3">
                 <label for="tax" class="form-label">VAT/Tax (%)</label>
                 <input type="number" class="form-control form-control-sm" id="tax" value="0">
             </div>
@@ -318,7 +322,7 @@
                 const quantity = parseFloat(row.querySelector('.item-quantity').value) || 0;
                 row.querySelector('.subtotal').textContent = (price * quantity).toFixed(2);
                 updateTotals();
-            } else if (e.target.id === 'discount' || e.target.id === 'tax') {
+            } else if (e.target.id === 'discount' || e.target.id === 'tax' || e.target.id === 'discountAmount') {
                 updateTotals();
             }
         });
@@ -331,11 +335,11 @@
             });
 
             const discount = parseFloat(document.getElementById('discount').value) || 0;
+            const discountDirectAmount = parseFloat(document.getElementById('discountAmount').value) || 0;
             const tax = parseFloat(document.getElementById('tax').value) || 0;
             const discountAmount = totalAmount * (discount / 100);
             const taxAmount = totalAmount * (tax / 100);
-
-            const payableAmount = totalAmount - discountAmount + taxAmount;
+            const payableAmount = (totalAmount+taxAmount) - (discountAmount+discountDirectAmount);
 
             document.getElementById('totalAmount').value = totalAmount.toFixed(2);
             document.getElementById('payableAmount').value = payableAmount.toFixed(2);
@@ -395,6 +399,7 @@
                 currency: requiredFields[9].value,
                 items: [],
                 discount: parseFloat(document.getElementById('discount').value) || 0,
+                discountAmount:parseFloat(document.getElementById('discountAmount').value) || 0,
                 tax: parseFloat(document.getElementById('tax').value) || 0,
                 totalAmount: parseFloat(document.getElementById('totalAmount').value) || 0,
                 payableAmount: parseFloat(document.getElementById('payableAmount').value) || 0,
