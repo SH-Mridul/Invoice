@@ -425,66 +425,90 @@
     </script>
 
      <script>
-        // Reference the table
-        const table = document.getElementById('colorSettings');
-        // Add a change event listener to the table
-        table.addEventListener('change', (event) => {
-             if (event.target.tagName === 'INPUT') {
-                // Get the ID of the changed input
-                const inputId = event.target.id;
-                const inputValue = event.target.value;
-
-                // Collect values of all inputs by their IDs
-                const values = {
-
-                    // header(company infomation)
-                    HeaderBackgoundColorInput: document.getElementById('HeaderBackgoundColorInput').value,
-                    HeaderAlphabetcolorInput: document.getElementById('HeaderAlphabetcolorInput').value,
-
-                    //client infomation table
-                    ClientBackgoundColorInput: document.getElementById('ClientBackgoundColorInput').value,
-                    ClientAlphabetcolorInput: document.getElementById('ClientAlphabetcolorInput').value,
-
-                    //product table information
-                    ProductTableBackgoundColorInput: document.getElementById('ProductTableBackgoundColorInput').value,
-                    ProductTableAlphabetcolorInput: document.getElementById('ProductTableAlphabetcolorInput').value,
-
-                    //payable amount infomation
-                    PayableAmountBackgoundColorInput: document.getElementById('PayableAmountBackgoundColorInput').value,
-                    PayableAmountAlphabetcolorInput: document.getElementById('PayableAmountAlphabetcolorInput').value,
-
-                    //customer thank you note
-                    ThankYouNote: document.getElementById('thankYouNote').value
-                };
-
-                //header color settings
+            // Function to update UI with the stored values or defaults
+            function applyColorSettings(values) {
+                // Header settings
                 document.querySelector('.header').style.backgroundColor = values.HeaderBackgoundColorInput;
                 document.querySelector('.header').style.color = values.HeaderAlphabetcolorInput;
 
-                //client information color settings
-                const clientInfoTableHeaders = document.querySelectorAll('#client-info-table th');
-                clientInfoTableHeaders.forEach(th => {
+                // Client information table settings
+                document.querySelectorAll('#client-info-table th').forEach(th => {
                     th.style.backgroundColor = values.ClientBackgoundColorInput;
                     th.style.color = values.ClientAlphabetcolorInput;
                 });
-                
 
-
-                //items table color settings
-                const itemsTableHeaders = document.querySelectorAll('#products-items-table th');
-                itemsTableHeaders.forEach(th => {
+                // Product table settings
+                document.querySelectorAll('#products-items-table th').forEach(th => {
                     th.style.backgroundColor = values.ProductTableBackgoundColorInput;
                     th.style.color = values.ProductTableAlphabetcolorInput;
                 });
 
-                //payable-amount color settings
+                // Payable amount settings
                 document.querySelector('.amount-due').style.backgroundColor = values.PayableAmountBackgoundColorInput;
                 document.querySelector('.amount-due').style.color = values.PayableAmountAlphabetcolorInput;
 
-                //customer thank you note settings
+                // Thank you note
                 document.getElementById('customerThankYouNote').innerText = values.ThankYouNote;
             }
-        });
+
+            // Function to get values from inputs
+            function getInputValues() {
+                return {
+                    HeaderBackgoundColorInput: document.getElementById('HeaderBackgoundColorInput').value,
+                    HeaderAlphabetcolorInput: document.getElementById('HeaderAlphabetcolorInput').value,
+                    ClientBackgoundColorInput: document.getElementById('ClientBackgoundColorInput').value,
+                    ClientAlphabetcolorInput: document.getElementById('ClientAlphabetcolorInput').value,
+                    ProductTableBackgoundColorInput: document.getElementById('ProductTableBackgoundColorInput').value,
+                    ProductTableAlphabetcolorInput: document.getElementById('ProductTableAlphabetcolorInput').value,
+                    PayableAmountBackgoundColorInput: document.getElementById('PayableAmountBackgoundColorInput').value,
+                    PayableAmountAlphabetcolorInput: document.getElementById('PayableAmountAlphabetcolorInput').value,
+                    ThankYouNote: document.getElementById('thankYouNote').value
+                };
+            }
+
+            // Function to initialize input values from localStorage or defaults
+            function initializeInputs() {
+                const storedValues = JSON.parse(localStorage.getItem('colorSettings')) || {};
+
+                document.getElementById('HeaderBackgoundColorInput').value = storedValues.HeaderBackgoundColorInput || '#028858';
+                document.getElementById('HeaderAlphabetcolorInput').value = storedValues.HeaderAlphabetcolorInput || '#FFFFFF';
+
+                document.getElementById('ClientBackgoundColorInput').value = storedValues.ClientBackgoundColorInput || '#27322e';
+                document.getElementById('ClientAlphabetcolorInput').value = storedValues.ClientAlphabetcolorInput || '#FFFFFF';
+
+                document.getElementById('ProductTableBackgoundColorInput').value = storedValues.ProductTableBackgoundColorInput || '#028858';
+                document.getElementById('ProductTableAlphabetcolorInput').value = storedValues.ProductTableAlphabetcolorInput || '#FFFFFF';
+
+                document.getElementById('PayableAmountBackgoundColorInput').value = storedValues.PayableAmountBackgoundColorInput || '#028858';
+                document.getElementById('PayableAmountAlphabetcolorInput').value = storedValues.PayableAmountAlphabetcolorInput || '#FFFFFF';
+
+                document.getElementById('thankYouNote').value = storedValues.ThankYouNote || '*Your trust is greatly appreciated*';
+            }
+
+            // Main function to handle table events and apply changes
+            document.addEventListener('DOMContentLoaded', () => {
+                // Reference the table
+                const table = document.getElementById('colorSettings');
+
+                // Initialize inputs
+                initializeInputs();
+
+                // Apply stored settings initially
+                applyColorSettings(getInputValues());
+
+                // Add a change event listener to the table
+                table.addEventListener('change', (event) => {
+                    if (event.target.tagName === 'INPUT') {
+                        const values = getInputValues();
+
+                        // Save updated values to localStorage
+                        localStorage.setItem('colorSettings', JSON.stringify(values));
+
+                        // Apply changes to the UI
+                        applyColorSettings(values);
+                    }
+                });
+            });
     </script>
 </body>
 
