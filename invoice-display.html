@@ -173,7 +173,7 @@
         <div class="col-md-3"></div>
         <div class="col-md-6">
             <div class="custom-hr">
-                <span style="color: black !important;">Invoice Colour & Note Settings</span>
+                <span style="color: black !important;">Invoice Settings</span>
             </div>
             <table class="table table-sm table-bordered table-responsive table-hover" id="colorSettings">
                 <tbody>
@@ -195,6 +195,15 @@
                     </tr>
                     <tr>
                         <td colspan="2" class="text-center">Note: <br><input type="text" style="width: 80%;" class="form-control form-control-sm my-2 text-center border-success  d-block mx-auto" id="thankYouNote" value="*Your trust is greatly appreciated*"></td>
+                    </tr>
+                     <tr>
+                        <td colspan="2" class="text-center">
+                            Signature[Not Required]: <br>
+                                
+                                <input type="file" style="width: 80%;" class="form-control form-control-sm my-2 text-center border-success  d-block mx-auto" id="signature-input" accept=".jpg, .jpeg, .png" onchange="showSignature(event)">
+                                <button class="btn btn-sm btn-danger d-none" id="signature-remove" onclick="removeSignature()">Remove Signature</button><br>
+                            <small class="form-text text-muted">Allowed file types: .jpg, .jpeg, .png</small>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -363,8 +372,8 @@
                             <p></p>
                             <p></p>
                             <p></p>
-                             <div style = "width:100px; height:40px; margin-left:50px; margin-bottom:10px">
-                                <img src="signature.png" class="img-fluid" alt="signature" style="padding:10px">
+                             <div clss="d-none" style = "width:100px; height:40px; margin-left:50px; margin-bottom:10px" id="signature-div">
+                                <img src="signature.png" class="img-fluid d-none" alt="signature" style="padding:10px" id="signature">
                              </div>
                             <span>--------------------------------------------------</span><br>
                             <span>Signature</span>
@@ -512,6 +521,54 @@
                     }
                 });
             });
+    </script>
+
+    <!-- signature js function -->
+    <script>
+        function showSignature(event) {
+            const fileInput = event.target;
+            const file = fileInput.files[0];
+
+            if (file) {
+                const validExtensions = ['image/jpeg', 'image/png', 'image/jpg']; // Allowed MIME types
+                if (!validExtensions.includes(file.type)) {
+                    alert('Invalid file type! Please upload a .jpg, .jpeg, or .png image.');
+                    fileInput.value = ''; // Reset the input
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const signatureImg = document.getElementById('signature');
+                    const signatureDiv = document.getElementById('signature-div');
+                    const signatureRemoveButton = document.getElementById('signature-remove');
+
+                    // Set the image source and remove the 'd-none' class
+                    signatureImg.src = e.target.result;
+                    signatureDiv.classList.remove('d-none');
+                    signatureImg.classList.remove('d-none');
+                    signatureRemoveButton.classList.remove('d-none');
+                };
+                reader.readAsDataURL(file); // Read the file as a data URL
+            }
+        }
+
+        
+        function removeSignature() {
+            const signatureImg = document.getElementById('signature');
+            const signatureDiv = document.getElementById('signature-div');
+            const fileInput = document.getElementById('signature-input');
+            const signatureRemoveButton = document.getElementById('signature-remove');
+
+            // Clear the file input
+            fileInput.value = '';
+
+            // Hide the signature preview and div
+            signatureImg.src = '';
+            signatureDiv.classList.add('d-none');
+            signatureImg.classList.add('d-none');
+            signatureRemoveButton.classList.add('d-none');
+        }
     </script>
 </body>
 
