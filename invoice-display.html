@@ -205,6 +205,10 @@
                             <small class="form-text text-muted">Allowed file types: .jpg, .jpeg, .png</small>
                         </td>
                     </tr>
+
+                    <tr>
+                        <td colspan="2" class="text-center"><button style="width: 80%;" class="btn btn-warning btn-sm btn-lg btn-block my-2" onclick="setDefaultColors()">set default colour</button></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -375,7 +379,7 @@
                              <div clss="d-none" style = "width:100px; height:40px; margin-left:50px; margin-bottom:10px" id="signature-div">
                                 <img src="signature.png" class="img-fluid d-none" alt="signature" style="padding:10px" id="signature">
                              </div>
-                            <span>--------------------------------------------------</span><br>
+                            <hr style="margin-left:10px; width:190px; height:2px; background-color:black; border:none;">
                             <span>Signature</span>
                         </div>
                         <div>
@@ -521,6 +525,27 @@
                     }
                 });
             });
+
+
+            //default colour settings
+            function setDefaultColors() {
+                // Clear any stored values in localStorage
+                localStorage.removeItem('colorSettings');
+
+                // Initialize inputs with default values
+                initializeInputs();
+                applyColorSettings(getInputValues());
+
+                // Show a success message using SweetAlert2
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Colors Reset!',
+                    text: 'The default colors have been restored.',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    timerProgressBar: true,
+                });
+            }
     </script>
 
     <!-- signature js function -->
