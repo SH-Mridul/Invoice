@@ -532,7 +532,15 @@
             if (file) {
                 const validExtensions = ['image/jpeg', 'image/png', 'image/jpg']; // Allowed MIME types
                 if (!validExtensions.includes(file.type)) {
-                    alert('Invalid file type! Please upload a .jpg, .jpeg, or .png image.');
+                    Swal.fire({
+                        icon: 'error', // Choose the type of alert: 'success', 'error', 'warning', 'info', 'question'
+                        title: 'Invalid File Type!',
+                        text: 'Please upload a .jpg, .jpeg, or .png image.',
+                        timer: 2000, // Time in milliseconds
+                        showConfirmButton: false, // Hides the "OK" button
+                        timerProgressBar: true, // Shows a progress bar
+                    });
+
                     fileInput.value = ''; // Reset the input
                     return;
                 }
@@ -568,6 +576,15 @@
             signatureDiv.classList.add('d-none');
             signatureImg.classList.add('d-none');
             signatureRemoveButton.classList.add('d-none');
+
+            Swal.fire({
+                icon: 'info', // Choose the type of alert: 'success', 'error', 'warning', 'info', 'question'
+                title: 'Signature',
+                text: 'Removed signature.',
+                timer: 2000, // Time in milliseconds
+                showConfirmButton: false, // Hides the "OK" button
+                timerProgressBar: true, // Shows a progress bar
+            });
         }
     </script>
 </body>
