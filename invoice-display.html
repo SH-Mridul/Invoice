@@ -347,6 +347,7 @@
                             <tr>
                                 <th>Item No</th>
                                 <th>Product/Service</th>
+                                 <th>Unit Of Measurement</th>
                                 <th>Quantity</th>
                                 <th>Unit Price</th>
                                 <th>Total</th>
@@ -357,6 +358,7 @@
                                 <tr>
                                     <td>${item.itemCode || index + 1}</td>
                                     <td>${item.itemName}</td>
+                                    <td>${item.itemUnit}</td>
                                     <td>${item.itemQuantity}</td>
                                     <td>${invoiceData.currency}${item.itemPrice.toFixed(2)}</td>
                                     <td>${invoiceData.currency}${item.subtotal.toFixed(2)}</td>

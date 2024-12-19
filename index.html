@@ -168,6 +168,7 @@
             <thead class="table-dark">
                 <tr>
                     <th>Item Name</th>
+                    <th>Item Unit of Measurement</th>
                     <th>Item Price</th>
                     <th>Item Quantity</th>
                     <th>Subtotal</th>
@@ -177,6 +178,62 @@
             <tbody>
                 <tr>
                     <td><input type="text" class="form-control item-name form-control-sm" placeholder="Item Name"></td>
+                    <td>
+                        <select id="unit" name="unit"  class="item-unit form-control form-control-sm">
+                            <option value="" selected disabled>select unit of measurement</option>
+                            <!-- Weight -->
+                            <option value="kg">Kilogram (kg)</option>
+                            <option value="g">Gram (g)</option>
+                            <option value="mg">Milligram (mg)</option>
+                            <option value="lb">Pound (lb)</option>
+                            <option value="oz">Ounce (oz)</option>
+                            <option value="ton">Ton (ton)</option>
+
+                            <!-- Volume -->
+                            <option value="l">Liter (l)</option>
+                            <option value="ml">Milliliter (ml)</option>
+                            <option value="cl">Centiliter (cl)</option>
+                            <option value="gallon">Gallon</option>
+                            <option value="quart">Quart</option>
+                            <option value="pint">Pint</option>
+                            <option value="cup">Cup</option>
+                            <option value="fl_oz">Fluid Ounce (fl oz)</option>
+
+                            <!-- Length -->
+                            <option value="m">Meter (m)</option>
+                            <option value="cm">Centimeter (cm)</option>
+                            <option value="mm">Millimeter (mm)</option>
+                            <option value="km">Kilometer (km)</option>
+                            <option value="inch">Inch (in)</option>
+                            <option value="foot">Foot (ft)</option>
+                            <option value="yard">Yard (yd)</option>
+                            <option value="mile">Mile (mi)</option>
+
+                            <!-- Count -->
+                            <option value="piece">Piece</option>
+                            <option value="dozen">Dozen</option>
+                            <option value="gross">Gross (144 units)</option>
+                            <option value="pair">Pair</option>
+                            <option value="set">Set</option>
+                            <option value="pack">Pack</option>
+                            <option value="box">Box</option>
+                            <option value="carton">Carton</option>
+
+                            <!-- Area -->
+                            <option value="sqm">Square Meter (m²)</option>
+                            <option value="sqcm">Square Centimeter (cm²)</option>
+                            <option value="sqft">Square Foot (ft²)</option>
+                            <option value="acre">Acre</option>
+                            <option value="hectare">Hectare</option>
+
+                            <!-- Miscellaneous -->
+                            <option value="bundle">Bundle</option>
+                            <option value="roll">Roll</option>
+                            <option value="barrel">Barrel</option>
+                            <option value="sheet">Sheet</option>
+                            <option value="ream">Ream</option>
+                        </select>
+                    </td>
                     <td><input type="number" class="form-control item-price form-control-sm" placeholder="Price"></td>
                     <td><input type="number" class="form-control item-quantity form-control-sm" placeholder="Quantity"></td>
                     <td class="subtotal">0</td>
@@ -282,9 +339,14 @@
 
 
     <script>
+         document.addEventListener('DOMContentLoaded', () => {
+            const randomNumber = Math.floor(Math.random() * (1000 - 100 + 1)) + 100;
+            document.querySelector('#invoiceNumber').value = randomNumber;
+         });
+
         document.getElementById('addRow').addEventListener('click', function () {
             const lastRow = document.querySelector('#invoiceTable tbody tr:last-child');
-            const inputs = lastRow.querySelectorAll('input');
+            const inputs = lastRow.querySelectorAll('input:not(:disabled), select:not(:disabled)');
             const isFilled = Array.from(inputs).every(input => input.value.trim() !== '');
 
             if (isFilled) {
@@ -292,6 +354,62 @@
                 const newRow = `
                     <tr>
                         <td><input type="text" class="form-control item-name form-control-sm" placeholder="Item Name"></td>
+                        <td>
+                            <select id="unit" name="unit"  class="item-unit form-control form-control-sm">
+                                <option value="" selected disabled>select unit of measurement</option>
+                                <!-- Weight -->
+                                <option value="kg">Kilogram (kg)</option>
+                                <option value="g">Gram (g)</option>
+                                <option value="mg">Milligram (mg)</option>
+                                <option value="lb">Pound (lb)</option>
+                                <option value="oz">Ounce (oz)</option>
+                                <option value="ton">Ton (ton)</option>
+
+                                <!-- Volume -->
+                                <option value="l">Liter (l)</option>
+                                <option value="ml">Milliliter (ml)</option>
+                                <option value="cl">Centiliter (cl)</option>
+                                <option value="gallon">Gallon</option>
+                                <option value="quart">Quart</option>
+                                <option value="pint">Pint</option>
+                                <option value="cup">Cup</option>
+                                <option value="fl_oz">Fluid Ounce (fl oz)</option>
+
+                                <!-- Length -->
+                                <option value="m">Meter (m)</option>
+                                <option value="cm">Centimeter (cm)</option>
+                                <option value="mm">Millimeter (mm)</option>
+                                <option value="km">Kilometer (km)</option>
+                                <option value="inch">Inch (in)</option>
+                                <option value="foot">Foot (ft)</option>
+                                <option value="yard">Yard (yd)</option>
+                                <option value="mile">Mile (mi)</option>
+
+                                <!-- Count -->
+                                <option value="piece">Piece</option>
+                                <option value="dozen">Dozen</option>
+                                <option value="gross">Gross (144 units)</option>
+                                <option value="pair">Pair</option>
+                                <option value="set">Set</option>
+                                <option value="pack">Pack</option>
+                                <option value="box">Box</option>
+                                <option value="carton">Carton</option>
+
+                                <!-- Area -->
+                                <option value="sqm">Square Meter (m²)</option>
+                                <option value="sqcm">Square Centimeter (cm²)</option>
+                                <option value="sqft">Square Foot (ft²)</option>
+                                <option value="acre">Acre</option>
+                                <option value="hectare">Hectare</option>
+
+                                <!-- Miscellaneous -->
+                                <option value="bundle">Bundle</option>
+                                <option value="roll">Roll</option>
+                                <option value="barrel">Barrel</option>
+                                <option value="sheet">Sheet</option>
+                                <option value="ream">Ream</option>
+                            </select>
+                        </td>
                         <td><input type="number" class="form-control item-price form-control-sm" placeholder="Price"></td>
                         <td><input type="number" class="form-control item-quantity form-control-sm" placeholder="Quantity"></td>
                         <td class="subtotal">0</td>
@@ -407,12 +525,13 @@
 
             rows.forEach(row => {
                 const itemName = row.querySelector('.item-name').value.trim();
+                const itemUnit = row.querySelector('.item-unit').value.trim();
                 const itemPrice = parseFloat(row.querySelector('.item-price').value) || 0;
                 const itemQuantity = parseFloat(row.querySelector('.item-quantity').value) || 0;
                 const subtotal = parseFloat(row.querySelector('.subtotal').textContent) || 0;
 
                 if (itemName) {
-                    invoiceData.items.push({ itemName, itemPrice, itemQuantity, subtotal });
+                    invoiceData.items.push({ itemName, itemUnit, itemPrice, itemQuantity, subtotal });
                 }
             });
 
@@ -493,5 +612,4 @@
     });
   </script>
 </body>
-
 </html>
